@@ -18,7 +18,17 @@
         </ul>
     </nav>
     <main class="container">
-    <h1 class="text-center"> flashcaRds </h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1 class="text-center"> flashcaRds by R</h1>
 
     {% block content %} 
     {% endblock %} 
