@@ -2,6 +2,8 @@
 
 ### Functionality so far:
 
+---
+
 - Register for an account. Must have an account to use this site.
 - Login. If you are not logged in, you are not able to create any flashcard sets.
 - Logout. (For obvious reasons)
@@ -9,6 +11,8 @@
 - Coming soon: Create a set, and use it.
 
 ### Tech Stack
+
+---
 
 - Python
 - Flask

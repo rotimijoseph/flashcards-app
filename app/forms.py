@@ -22,3 +22,4 @@ class FlashCardForm(FlaskForm):
     question = TextAreaField('Question', validators=[DataRequired()])
     answer = TextAreaField('Answer', validators=[DataRequired()])
     next = SubmitField('Next')
+    view_set = SubmitField('View')

@@ -58,7 +58,10 @@
         {% endfor %}
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn">Next</button>
+        <button type="submit" class="btn" name="action" value="add_flashcard">Add Flashcard</button>
+    </div>
+    <div class="mb-3">
+        <a href="{{ url_for('view_set') }}" class="btn">View Set</a>
     </div>
 </form>
 

@@ -55,19 +55,28 @@ def account():
     return render_template('account.html')
 
 @app.route("/create", methods=['GET', 'POST'])
+@login_required
 def create():
     form = FlashCardForm()
     if current_user.is_authenticated == False:
         return redirect(url_for('login')) # to make sure logged in users can't login in or register again
     if form.validate_on_submit():
-        new_flashcard = FlashCard(question=form.question.data, answer=form.answer.data, user_id=current_user.user_id)
-        
-        db.session.add(new_flashcard)
-        try:
-            db.session.commit()
-            flash('Added to set', 'success')
-            return redirect(url_for('create'))
-        except SQLAlchemyError as e:  # Specific exception handling
-            db.session.rollback()
-            flash(f'Error: {str(e)}', 'error')
+        if request.form['action'] == 'add_flashcard':
+            new_flashcard = FlashCard(question=form.question.data, answer=form.answer.data, user_id=current_user.user_id)
+            db.session.add(new_flashcard)
+            try:
+                db.session.commit()
+                flash('Added to set', 'success')
+                return redirect(url_for('create'))
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                flash(f'Error: {str(e)}', 'error')
+        elif request.form['action'] == 'view_set':
+
+            return redirect(url_for('view_set'))
     return render_template('create.html', form=form, title="New Set")
+
+@app.route("/view_set")
+def view_set():
+    flashcards = FlashCard.query.filter_by().all()
+    return render_template('view_set.html', flashcards=flashcards)
