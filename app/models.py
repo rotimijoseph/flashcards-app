@@ -16,3 +16,10 @@ class User(db.Model, UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class FlashCard(db.Model):
+    __tablename__ = "flashcards"
+    flashcard_id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(100), nullable=False)
+    answer = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
