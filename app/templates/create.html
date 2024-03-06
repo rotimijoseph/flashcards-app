@@ -4,10 +4,39 @@
 
 <style>
     .input-field {
-        width: 70ch;
-        height: 10ch
+        width: 70%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: dodgerblue;
+        box-shadow: 0 0 5px dodgerblue;
+    }
+
+    .btn {
+        background-color: dodgerblue;
+        color: white;
+        padding: 8px 25px;
+        border: solid black;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #007bff;
+    }
+
+    .error-message {
+        color: red;
     }
 </style>
+
 
 
 <h1> {{ title }}</h1>
@@ -15,18 +44,22 @@
 <form method="POST" action="{{ url_for('create') }}" novalidate>
     {{ form.hidden_tag() }}
     <div class="mb-3">
-        {{ form.question.label}}<br/>{{ form.question(class="input-field") }}
+        {{ form.question.label}}<br/>
+        {{ form.question(class="input-field") }}
         {% for error in form.question.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+        <div class="error-message">{{ error }}</div>
         {% endfor %}
     </div>
     <div class="mb-3">
-        {{ form.answer.label}}<br/>{{ form.answer(class="input-field") }}
+        {{ form.answer.label}}<br/>
+        {{ form.answer(class="input-field") }}
         {% for error in form.answer.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+        <div class="error-message">{{ error }}</div>
         {% endfor %}
     </div>
-    <div class="mb-3">{{ form.next() }}</div>
+    <div class="mb-3">
+        <button type="submit" class="btn">Next</button>
+    </div>
 </form>
 
 {% endblock %}
