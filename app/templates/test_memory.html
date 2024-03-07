@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Select Set to Test</h1>
+
+<form method="POST" action="{{ url_for('test_memory') }}" novalidate>
+    {{ form.csrf_token }}
+    <div class="mb-3">
+        {{ form.set.label }}<br>
+        {{ form.set(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Test</button>
+    </div>
+</form>
+
+{% if flashcard %}
+<div class="flashcard-container">
+    <div class="flashcard">
+        <h2>Q: {{ flashcard.question }}</h2>
+        <form method="POST" action="{{ url_for('test_memory') }}">
+            {{ form.csrf_token }}
+            <input type="hidden" name="flashcard_id" value="{{ flashcard.flashcard_id }}">
+            <button type="submit" class="btn btn-primary">Flip</button>
+        </form>
+        <button type="button" class="btn btn-primary" onclick="nextFlashcard()">Next</button>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

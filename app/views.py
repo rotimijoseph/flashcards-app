@@ -4,6 +4,7 @@ from app.forms import RegisterForm, LoginForm, FlashCardForm, SelectSetForm
 from app.models import User, FlashCard
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.exc import SQLAlchemyError
+import random
 
 @app.route("/")
 def home():
@@ -75,14 +76,14 @@ def create():
     return render_template('create.html', form=form, title="New Set")
 
 @app.route("/view_set", methods=['GET', 'POST'])
-@login_required  # Ensure the user is logged in
+@login_required
 def view_set():
     form = SelectSetForm()
     form.set.choices = [(set_name[0], set_name[0]) for set_name in get_all_set_names()]
     flashcards = []
     if form.validate_on_submit():
         set_name = form.set.data
-        # Retrieve flashcards for the selected set name and created by the current user
+        # get flashcards by user
         flashcards = FlashCard.query.filter_by(set_name=set_name, user_id=current_user.user_id).all()
     return render_template('view_set.html', form=form, flashcards=flashcards)
 
@@ -91,3 +92,32 @@ def get_all_set_names():
 
 def get_flashcards_by_set_name(set_name):
     return FlashCard.query.filter_by(set_name=set_name).all()
+
+@app.route("/test_memory", methods=['GET', 'POST'])
+@login_required
+def test_memory():
+    form = SelectSetForm()
+    form.set.choices = [(set_name[0], set_name[0]) for set_name in get_all_set_names()]
+    flashcard = None # start with no flashcard 
+    if form.validate_on_submit():
+        set_name = form.set.data
+        flashcards = FlashCard.query.filter_by(set_name=set_name, user_id=current_user.user_id).all()
+        if flashcards:
+            flashcard = random.choice(flashcards)
+    return render_template('test_memory.html', form=form, flashcard=flashcard)
+
+@app.route("/flip", methods=['POST'])
+@login_required
+def flip_flashcard():
+    flashcard_id = request.form.get('flashcard_id')
+    flashcard = FlashCard.query.get(flashcard_id)
+    return render_template('test_memory.html', flashcard=flashcard, flipped=True)
+
+@app.route("/next", methods=['POST'])
+@login_required
+def next_flashcard():
+    # Logic to fetch the next flashcard
+    # This could involve querying the database for the next flashcard
+    # or maintaining a list of flashcards in the session
+    # and updating the current flashcard index to get the next one
+    return redirect(url_for('test_memory'))
