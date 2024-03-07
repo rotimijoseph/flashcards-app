@@ -2,6 +2,45 @@
 
 {% block content %}
 
-<h1> Set name here </h1>
+<style>
+    .flashcard-container {
+        margin: 2px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background-color: #f9f9f9;
+    }
+
+    .flashcard {
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* makes it look more professional with the shadow */
+    }
+
+    .flashcard h2 {
+        margin-top: 0;
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    .flashcard p {
+        margin-bottom: 0;
+        color: #666;
+    }
+</style>
+
+<h1>Set name here</h1>
+
+<div class="flashcard-container">
+    {% for flashcard in flashcards %}
+    <div class="flashcard">
+        <h2>Q: {{flashcard.question}}</h2>
+        <p>A: {{flashcard.answer}}</p>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
