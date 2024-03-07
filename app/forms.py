@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, DateField, TextAreaField, DecimalField
+from wtforms import StringField, SubmitField, PasswordField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+from app import db
+from app.models import FlashCard
+
 
 class RegisterForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired()])
@@ -19,7 +22,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
     
 class FlashCardForm(FlaskForm):
+    set_name = StringField('Set Name', validators=[DataRequired(), Length(min=2, max=20)])
     question = TextAreaField('Question', validators=[DataRequired()])
     answer = TextAreaField('Answer', validators=[DataRequired()])
     next = SubmitField('Next')
     view_set = SubmitField('View')
+    
+class SelectSetForm(FlaskForm):
+    set = SelectField('Select Set')

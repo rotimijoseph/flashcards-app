@@ -35,14 +35,21 @@
     .error-message {
         color: red;
     }
-</style>
 
+    .set-name {
+        width: 30ch;
+    }
+</style>
 
 
 <h1> {{ title }}</h1>
 
 <form method="POST" action="{{ url_for('create') }}" novalidate>
     {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.set_name.label}}<br/>
+        {{ form.set_name(class="set-name") }}
+    </div>
     <div class="mb-3">
         {{ form.question.label}}<br/>
         {{ form.question(class="input-field") }}

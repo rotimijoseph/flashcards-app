@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db, bcrypt
-from app.forms import RegisterForm, LoginForm, FlashCardForm
+from app.forms import RegisterForm, LoginForm, FlashCardForm, SelectSetForm
 from app.models import User, FlashCard
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy.exc import SQLAlchemyError
@@ -58,11 +58,9 @@ def account():
 @login_required
 def create():
     form = FlashCardForm()
-    if current_user.is_authenticated == False:
-        return redirect(url_for('login')) # to make sure logged in users can't login in or register again
     if form.validate_on_submit():
         if request.form['action'] == 'add_flashcard':
-            new_flashcard = FlashCard(question=form.question.data, answer=form.answer.data, user_id=current_user.user_id)
+            new_flashcard = FlashCard(set_name=form.set_name.data, question=form.question.data, answer=form.answer.data, user_id=current_user.user_id)
             db.session.add(new_flashcard)
             try:
                 db.session.commit()
@@ -76,7 +74,18 @@ def create():
             return redirect(url_for('view_set'))
     return render_template('create.html', form=form, title="New Set")
 
-@app.route("/view_set")
+@app.route("/view_set", methods=['GET', 'POST'])
 def view_set():
-    flashcards = FlashCard.query.filter_by().all()
-    return render_template('view_set.html', flashcards=flashcards)
+    form = SelectSetForm()
+    form.set.choices = [(set_name[0], set_name[0]) for set_name in get_all_set_names()]
+    flashcards = []
+    if form.validate_on_submit():
+        set_name = form.set.data
+        flashcards = get_flashcards_by_set_name(set_name)
+    return render_template('view_set.html', form=form, flashcards=flashcards)
+
+def get_all_set_names():
+    return FlashCard.query.with_entities(FlashCard.set_name).distinct().all()
+
+def get_flashcards_by_set_name(set_name):
+    return FlashCard.query.filter_by(set_name=set_name).all()

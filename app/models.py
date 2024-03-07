@@ -20,10 +20,11 @@ def load_user(user_id):
 class FlashCard(db.Model):
     __tablename__ = "flashcards"
     flashcard_id = db.Column(db.Integer, primary_key=True)
+    set_name = db.Column(db.String(30), nullable=False)
     question = db.Column(db.String(100), nullable=False)
     answer = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     
     def __repr__(self):
-        return f"flashcard({self.question}, {self.answer})"
+        return f"flashcard({self.set_name}, {self.question}, {self.answer})"
         

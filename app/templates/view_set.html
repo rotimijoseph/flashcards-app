@@ -32,7 +32,20 @@
     }
 </style>
 
-<h1>Set name here</h1>
+<h1>View Set</h1>
+
+<form method="POST" action="{{ url_for('view_set') }}" novalidate>
+    {{ form.csrf_token }}
+    <div class="mb-3">
+        {{ form.set.label }}<br>
+        {{ form.set(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">View Set</button>
+    </div>
+</form>
+
+<h2> {{ form.set.data }}</h2>
 
 <div class="flashcard-container">
     {% for flashcard in flashcards %}
