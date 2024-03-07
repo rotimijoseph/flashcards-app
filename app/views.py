@@ -75,13 +75,15 @@ def create():
     return render_template('create.html', form=form, title="New Set")
 
 @app.route("/view_set", methods=['GET', 'POST'])
+@login_required  # Ensure the user is logged in
 def view_set():
     form = SelectSetForm()
     form.set.choices = [(set_name[0], set_name[0]) for set_name in get_all_set_names()]
     flashcards = []
     if form.validate_on_submit():
         set_name = form.set.data
-        flashcards = get_flashcards_by_set_name(set_name)
+        # Retrieve flashcards for the selected set name and created by the current user
+        flashcards = FlashCard.query.filter_by(set_name=set_name, user_id=current_user.user_id).all()
     return render_template('view_set.html', form=form, flashcards=flashcards)
 
 def get_all_set_names():
